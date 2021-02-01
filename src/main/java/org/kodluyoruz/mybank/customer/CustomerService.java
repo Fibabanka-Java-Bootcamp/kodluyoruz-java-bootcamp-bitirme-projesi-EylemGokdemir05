@@ -36,10 +36,10 @@ public class CustomerService {
         return customerRepo.save(customer);
     }
 
-    public Customer delete(UUID id){
+    /*public Customer delete(UUID id){
         if (customerRepo.findCustomerByAccounts_Empty() && debitRepo.findDebitByMinDebitIsNull()){
             return customerRepo.delete(id);
         }
         return null;
-    }
+    }*/
 }

@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kodluyoruz.mybank.account.Account;
+import org.kodluyoruz.mybank.account.AccountDto;
 import org.kodluyoruz.mybank.card.Card;
+import org.kodluyoruz.mybank.card.CardDto;
 
 import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -24,10 +27,10 @@ public class Customer {
     private String name;
     private String surname;
 
-    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer")
     private Set<Account> accounts;
 
-    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer")
     private Set<Card> cards;
 
     public CustomerDto customerDto(){
@@ -35,6 +38,12 @@ public class Customer {
                 .id(this.id)
                 .name(this.name)
                 .surname(this.surname)
+                .accounts(accounts.stream()
+                        .map(Account::accountDto)
+                        .collect(Collectors.toSet()))
+                .cards(cards.stream()
+                        .map(Card::cardDto)
+                        .collect(Collectors.toSet()))
                 .build();
     }
 }

@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.kodluyoruz.mybank.card.Card;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -27,6 +25,10 @@ public class Debit {
     private LocalDateTime modifiedDate;
     private Integer totalAmount;
     private Integer minDebit;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "card_id",referencedColumnName = "id")
+    private Card card;
 
     public DebitDto debitDto(){
         return DebitDto.builder()

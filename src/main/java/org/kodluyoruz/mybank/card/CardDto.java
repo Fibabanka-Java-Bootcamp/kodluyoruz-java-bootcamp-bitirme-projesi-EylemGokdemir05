@@ -12,13 +12,13 @@ import java.util.UUID;
 public class CardDto {
     private UUID id;
     private String cardNumber;
-    private long limit;
+    private int boundary;
 
     public Card toCard(){
         return Card.builder()
                 .id(this.id)
                 .cardNumber(this.cardNumber)
-                .limit(this.limit)
+                .boundary(this.boundary)
                 .build();
     }
 }

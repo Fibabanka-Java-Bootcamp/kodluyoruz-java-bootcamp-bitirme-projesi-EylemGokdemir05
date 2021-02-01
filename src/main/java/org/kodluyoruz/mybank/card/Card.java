@@ -6,8 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kodluyoruz.mybank.account.Account;
 import org.kodluyoruz.mybank.customer.Customer;
+import org.kodluyoruz.mybank.debit.Debit;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -21,7 +23,7 @@ public class Card {
     @GeneratedValue
     private UUID id;
     private String cardNumber;
-    private long limit;
+    private int boundary;
     @Enumerated(EnumType.STRING)
     private CardType cardType;
 
@@ -33,11 +35,14 @@ public class Card {
     @JoinColumn(name = "account_id",referencedColumnName = "id")
     private Account account;
 
+    @OneToMany(mappedBy = "card")
+    private Set<Debit> debits;
+
     public CardDto cardDto(){
         return CardDto.builder()
                 .id(this.id)
                 .cardNumber(this.cardNumber)
-                .limit(this.limit)
+                .boundary(this.boundary)
                 .build();
     }
 }
