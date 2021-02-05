@@ -6,10 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kodluyoruz.mybank.account.Account;
 import org.kodluyoruz.mybank.customer.Customer;
-import org.kodluyoruz.mybank.debit.Debit;
 
 import javax.persistence.*;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -34,9 +32,6 @@ public class Card {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id",referencedColumnName = "id")
     private Account account;
-
-    @OneToMany(mappedBy = "card")
-    private Set<Debit> debits;
 
     public CardDto cardDto(){
         return CardDto.builder()

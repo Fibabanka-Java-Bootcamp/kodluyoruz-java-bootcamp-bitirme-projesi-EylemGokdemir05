@@ -1,7 +1,5 @@
 package org.kodluyoruz.mybank.account;
 
-import org.kodluyoruz.mybank.exception.AccountException;
-import org.kodluyoruz.mybank.exception.CustomerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,9 +25,15 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDto> getAccountSummary(@PathVariable("id")UUID id)
-        throws CustomerException, AccountException{
+    public ResponseEntity<AccountDto> getAccountSummary(@PathVariable("id")UUID id){
         return ResponseEntity.ok().body(accountService.getAccountSummary(id));
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public AccountDto transferMoney(@PathVariable("IBAN") String IBAN,
+                                    @RequestParam("moneyTransfer") int moneyTransfer){
+        return accountService.transferMoney(IBAN, moneyTransfer);
     }
 
     @DeleteMapping

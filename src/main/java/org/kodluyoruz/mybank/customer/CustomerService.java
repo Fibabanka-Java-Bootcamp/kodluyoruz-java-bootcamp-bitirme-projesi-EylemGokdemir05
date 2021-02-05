@@ -1,6 +1,5 @@
 package org.kodluyoruz.mybank.customer;
 
-import org.kodluyoruz.mybank.debit.DebitRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,11 +11,9 @@ import java.util.UUID;
 @Service
 public class CustomerService {
     private final CustomerRepo customerRepo;
-    private final DebitRepo debitRepo;
 
-    public CustomerService(CustomerRepo customerRepo, DebitRepo debitRepo) {
+    public CustomerService(CustomerRepo customerRepo) {
         this.customerRepo = customerRepo;
-        this.debitRepo = debitRepo;
     }
 
     public Customer create(Customer customer){

@@ -10,4 +10,7 @@ public interface AccountRepo extends CrudRepository<Account, UUID> {
     Account deleteAccountById(UUID id);
     Optional<Account> findById(UUID id);
     Optional<Account> findByCustomer(Customer customer);
+    Account getByIBAN(String IBAN);
+
+    AccountDto save();
 }

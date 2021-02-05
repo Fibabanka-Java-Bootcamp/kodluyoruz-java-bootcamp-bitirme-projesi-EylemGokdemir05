@@ -6,12 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kodluyoruz.mybank.card.Card;
 import org.kodluyoruz.mybank.customer.Customer;
-import org.kodluyoruz.mybank.transaction.Transaction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -27,7 +25,7 @@ public class Account {
     @GeneratedValue
     private UUID id;
     private String accountNumber;
-    private BigDecimal balance;
+    private int balance;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     @GeneratedValue
@@ -41,9 +39,6 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id",referencedColumnName = "id")
     private Customer customer;
-
-    @OneToMany(mappedBy = "account",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private Set<Transaction> transactions;
 
     @OneToMany(mappedBy = "account",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Card> cards;

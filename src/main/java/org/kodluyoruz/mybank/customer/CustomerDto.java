@@ -9,13 +9,9 @@ import org.kodluyoruz.mybank.card.CardDto;
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+@Data
 @Builder
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class CustomerDto {
     private UUID id;
     @NotBlank(message = "Name is necessary")

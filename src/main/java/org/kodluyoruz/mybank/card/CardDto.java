@@ -4,11 +4,8 @@ import lombok.*;
 
 import java.util.UUID;
 
+@Data
 @Builder
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class CardDto {
     private UUID id;
     private String cardNumber;
