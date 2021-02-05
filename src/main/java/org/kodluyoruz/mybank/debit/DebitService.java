@@ -1,7 +1,7 @@
 package org.kodluyoruz.mybank.debit;
 
+import org.kodluyoruz.mybank.transaction.PaymentType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.UUID;
 
@@ -13,7 +13,15 @@ public class DebitService {
         this.debitRepo = debitRepo;
     }
 
-    public Debit get(UUID id){
+    public Debit get(UUID id) {
         return debitRepo.findAllById(id);
+    }
+
+    public boolean getDebit(UUID id, Integer debit) {
+        if (debitRepo.findDebitsByIdAndMinDebit(id, debit) && debit != 0) {
+            System.out.println("Debit: " + debit);
+            return true;
+        }
+        return false;
     }
 }
