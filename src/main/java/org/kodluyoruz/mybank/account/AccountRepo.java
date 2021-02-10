@@ -11,6 +11,4 @@ public interface AccountRepo extends CrudRepository<Account, UUID> {
     Optional<Account> findById(UUID id);
     Optional<Account> findByCustomer(Customer customer);
     Account getByIBAN(String IBAN);
-
-    AccountDto save();
 }
