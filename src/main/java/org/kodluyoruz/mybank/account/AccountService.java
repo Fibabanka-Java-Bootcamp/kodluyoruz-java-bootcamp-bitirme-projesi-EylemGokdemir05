@@ -52,48 +52,40 @@ public class AccountService {
         return accountDto;
     }
 
-    public AccountDto transferMoney(String IBAN, int moneyTransfer){
+    public AccountDto transferMoney(String IBAN,String toIBAN, int moneyTransfer){
+        AccountDto demandDepositAccountDto=accountRepo.getByIban(IBAN)
+                .orElseThrow(() ->   new ResponseStatusException(HttpStatus.NOT_FOUND, "Account is not found")).accountDto();
+        accountType=demandDepositAccountDto.getAccountType();
         if (accountType==AccountType.DEMAND_DEPOSIT_ACCOUNT){
-            AccountDto demandDepositAccountDto=accountRepo.getByIBAN(IBAN).accountDto();
             int demandDepositMoney=demandDepositAccountDto.getBalance();
-            AccountDto savingsAccountDto=accountRepo.getByIBAN(IBAN).accountDto();
-            int savingsMoney=savingsAccountDto.getBalance();
-            if (demandDepositMoney-moneyTransfer<0){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Not enough money in your demand deposit account!");
+            AccountDto accountDto=accountRepo.getByIban(toIBAN)
+                    .orElseThrow(() ->   new ResponseStatusException(HttpStatus.NOT_FOUND, "Account is not found")).accountDto();
+            int money=accountDto.getBalance();
+            if (accountDto.getAccountType()==AccountType.SAVINGS_ACCOUNT){
+                return moneyTransfer(moneyTransfer, demandDepositAccountDto, demandDepositMoney, accountDto, money);
             }else {
-                if (demandDepositAccountDto.getCurrency().equals(savingsAccountDto.getCurrency())){
-                    demandDepositAccountDto.setBalance(demandDepositMoney-moneyTransfer);
-                    savingsAccountDto.setBalance(savingsMoney+moneyTransfer);
-                }else {
-                    RestExchangeDto exchangeDto=
-                            Exchange.convertedCurrency.apply(demandDepositAccountDto.getCurrency());
-                    demandDepositAccountDto.setBalance(demandDepositMoney-moneyTransfer);
-                    savingsAccountDto.setBalance((int) (savingsMoney+(moneyTransfer*exchangeDto.getRates().get(savingsAccountDto.getCurrency()))));
-                }
-                accountRepo.save(savingsAccountDto.toAccount()).accountDto();
-                return accountRepo.save(demandDepositAccountDto.toAccount()).accountDto();
+                return moneyTransfer(moneyTransfer, demandDepositAccountDto, demandDepositMoney, accountDto, money);
             }
-        } else if (accountType==AccountType.SAVINGS_ACCOUNT){
-            AccountDto demandDepositAccountDto=accountRepo.getByIBAN(IBAN).accountDto();
-            int demandDepositMoney=demandDepositAccountDto.getBalance();
-            AccountDto savingsAccountDto=accountRepo.getByIBAN(IBAN).accountDto();
-            int savingsMoney=demandDepositAccountDto.getBalance();
-            if (demandDepositMoney-moneyTransfer<0){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Not enough money in your demand deposit account!");
-            }else {
-                if (savingsAccountDto.getCurrency().equals(demandDepositAccountDto.getCurrency())){
-                    savingsAccountDto.setBalance(savingsMoney-moneyTransfer);
-                    demandDepositAccountDto.setBalance(demandDepositMoney+moneyTransfer);
-                }else {
-                    RestExchangeDto exchangeDto=
-                            Exchange.convertedCurrency.apply(savingsAccountDto.getCurrency());
-                    savingsAccountDto.setBalance(savingsMoney-moneyTransfer);
-                    demandDepositAccountDto.setBalance((int) (demandDepositMoney+(moneyTransfer*exchangeDto.getRates().get(demandDepositAccountDto.getCurrency()))));
-                }
-                accountRepo.save(demandDepositAccountDto.toAccount()).accountDto();
-                return accountRepo.save(savingsAccountDto.toAccount()).accountDto();
-            }
+        } else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Account is not found!");
         }
-        return null; // TODO : bu durumu dusunmen gerek yeniden
+    }
+
+    private AccountDto moneyTransfer(int moneyTransfer, AccountDto demandDepositAccountDto, int demandDepositMoney, AccountDto accountDto, int money) {
+        if (demandDepositMoney - moneyTransfer < 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not enough money in your demand deposit account!");
+        } else {
+            if (demandDepositAccountDto.getCurrency().equals(accountDto.getCurrency())) {
+                demandDepositAccountDto.setBalance(demandDepositMoney - moneyTransfer);
+                accountDto.setBalance(money + moneyTransfer);
+            } else {
+                RestExchangeDto exchangeDto =
+                        Exchange.convertedCurrency.apply(demandDepositAccountDto.getCurrency());
+                demandDepositAccountDto.setBalance(demandDepositMoney - moneyTransfer);
+                accountDto.setBalance((int) (money + (moneyTransfer * exchangeDto.getRates().get(accountDto.getCurrency()))));
+            }
+            accountRepo.save(accountDto.toAccount()).accountDto();
+            return accountRepo.save(demandDepositAccountDto.toAccount()).accountDto();
+        }
     }
 }

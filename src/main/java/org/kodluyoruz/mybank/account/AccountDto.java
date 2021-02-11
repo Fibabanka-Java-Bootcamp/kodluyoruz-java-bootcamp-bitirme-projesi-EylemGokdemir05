@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,26 +15,25 @@ public class AccountDto {
     private UUID id;
     private String accountNumber;
     private int balance;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
-    @GeneratedValue
-    @NotNull
-    @Size(min = 22, max = 34)
-    private String IBAN;
+    private LocalDate createdDate;
+    private LocalDate modifiedDate;
+    private String iban;
     private String currency;
+    private AccountType accountType;
 
     public AccountDto() {
 
     }
 
-    public AccountDto(UUID id, String accountNumber, int balance, LocalDateTime createdDate, LocalDateTime modifiedDate, @NotNull @Size(min = 22, max = 34) String IBAN, String currency) {
+    public AccountDto(UUID id, String accountNumber, int balance, LocalDate createdDate, LocalDate modifiedDate, String iban, String currency, AccountType accountType) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
-        this.IBAN = IBAN;
+        this.iban = iban;
         this.currency = currency;
+        this.accountType = accountType;
     }
 
     public Account toAccount(){
@@ -43,8 +43,9 @@ public class AccountDto {
                 .balance(this.balance)
                 .createdDate(this.createdDate)
                 .modifiedDate(this.modifiedDate)
-                .IBAN(this.IBAN)
+                .iban(this.iban)
                 .currency(this.currency)
+                .accountType(this.accountType)
                 .build();
     }
 }

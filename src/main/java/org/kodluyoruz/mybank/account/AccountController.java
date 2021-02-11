@@ -29,11 +29,12 @@ public class AccountController {
         return ResponseEntity.ok().body(accountService.getAccountSummary(id));
     }
 
-    @PutMapping
+    @PutMapping("/{IBAN}/{toIBAN}")
     @ResponseStatus(HttpStatus.CREATED)
     public AccountDto transferMoney(@PathVariable("IBAN") String IBAN,
+                                    @PathVariable("toIBAN") String toIBAN,
                                     @RequestParam("moneyTransfer") int moneyTransfer){
-        return accountService.transferMoney(IBAN, moneyTransfer);
+        return accountService.transferMoney(IBAN,toIBAN, moneyTransfer);
     }
 
     @DeleteMapping

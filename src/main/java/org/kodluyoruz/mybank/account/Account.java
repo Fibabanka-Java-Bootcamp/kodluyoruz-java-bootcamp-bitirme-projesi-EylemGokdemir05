@@ -1,5 +1,6 @@
 package org.kodluyoruz.mybank.account;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,9 @@ import org.kodluyoruz.mybank.customer.Customer;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,19 +22,18 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "accounts")
+@Table(name = "account")
 public class Account {
     @Id
     @GeneratedValue
     private UUID id;
     private String accountNumber;
     private int balance;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
-    @GeneratedValue
-    @NotNull
-    @Size(min = 22, max = 34)
-    private String IBAN;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate createdDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate modifiedDate;
+    private String iban;
     private String currency;
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
@@ -50,8 +52,9 @@ public class Account {
                 .balance(this.balance)
                 .createdDate(this.createdDate)
                 .modifiedDate(this.modifiedDate)
-                .IBAN(this.IBAN)
+                .iban(this.iban)
                 .currency(this.currency)
+                .accountType(this.accountType)
                 .build();
     }
 }
