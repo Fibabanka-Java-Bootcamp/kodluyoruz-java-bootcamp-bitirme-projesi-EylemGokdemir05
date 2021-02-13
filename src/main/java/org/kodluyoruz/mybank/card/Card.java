@@ -21,10 +21,8 @@ public class Card {
     @GeneratedValue
     private UUID id;
     private String cardNumber;
-    private int boundary;
+    private int boundary=2000;
     private int debt;
-    @Enumerated(EnumType.STRING)
-    private CardType cardType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id",referencedColumnName = "id")

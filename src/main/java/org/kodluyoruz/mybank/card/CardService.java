@@ -37,14 +37,18 @@ public class CardService {
         return cardRepo.findById(id).get().getDebt();
     }
 
-    public CardDto updateDebt(UUID id, int money) {
+    public CardDto updateDebt(UUID id, int money) throws Exception {
         CardDto cardDto = cardRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card is not found!")).cardDto();
-        cardDto.setDebt(cardDto.getDebt() + money);
-        return cardRepo.save(cardDto.toCard()).cardDto();
+        if (cardDto.getBoundary() > cardDto.getDebt()) {
+            cardDto.setDebt(cardDto.getDebt() + money);
+            return cardRepo.save(cardDto.toCard()).cardDto();
+        } else {
+            throw new Exception("Limit not enough!");
+        }
     }
 
-    public CardDto payDebt(UUID id,UUID accountID, int debt) {
+    public CardDto payDebt(UUID id, UUID accountID, int debt) {
         AccountDto accountDto = accountRepo.findById(accountID)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account is not found!")).accountDto();
         int balance = accountDto.getBalance();

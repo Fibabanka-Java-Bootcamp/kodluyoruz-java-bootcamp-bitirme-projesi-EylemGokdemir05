@@ -1,5 +1,6 @@
 package org.kodluyoruz.mybank.card;
 
+import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class CardController {
         return cardService.getDebt(id);
     }
 
+    @SneakyThrows
     @PutMapping("/{id}/updatedebt")
     public CardDto updateDebt(@PathVariable("id") UUID id,
                               @RequestParam("money") int money){
