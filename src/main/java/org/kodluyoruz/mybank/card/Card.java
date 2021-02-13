@@ -22,6 +22,7 @@ public class Card {
     private UUID id;
     private String cardNumber;
     private int boundary;
+    private int debt;
     @Enumerated(EnumType.STRING)
     private CardType cardType;
 
@@ -38,6 +39,7 @@ public class Card {
                 .id(this.id)
                 .cardNumber(this.cardNumber)
                 .boundary(this.boundary)
+                .debt(this.debt)
                 .build();
     }
 }

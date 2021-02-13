@@ -26,4 +26,11 @@ public class CardController {
         return cardService.get(id)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Card not found!")).cardDto();
     }
+
+    @GetMapping("/{id}/debt")
+    public CardDto getDebt(@PathVariable("id") UUID id,
+                           @PathVariable("debt") int debt){
+        return cardService.getDebt(id,debt)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Debt is not found!")).cardDto();
+    }
 }

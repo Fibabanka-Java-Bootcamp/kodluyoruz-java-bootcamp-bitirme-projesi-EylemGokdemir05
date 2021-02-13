@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface CardRepo extends CrudRepository<Card, UUID> {
     Optional<Card> findById(UUID id);
+    Optional<Card> findByDebtOrderById(UUID id,int debt);
 }

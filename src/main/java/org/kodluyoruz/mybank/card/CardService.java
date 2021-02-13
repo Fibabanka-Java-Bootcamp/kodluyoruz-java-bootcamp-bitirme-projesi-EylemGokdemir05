@@ -17,4 +17,8 @@ public class CardService {
     public Optional<Card> get(UUID id){
         return cardRepo.findById(id);
     }
+
+    public Optional<Card> getDebt(UUID id,int debt){
+        return cardRepo.findByDebtOrderById(id,debt);
+    }
 }
