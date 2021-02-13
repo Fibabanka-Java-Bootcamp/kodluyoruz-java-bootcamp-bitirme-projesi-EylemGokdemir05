@@ -45,5 +45,6 @@ public class CustomerService {
         if (currencyControl){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"the customer's account has money.");
         }
+        customerRepo.delete(customer);
     }
 }

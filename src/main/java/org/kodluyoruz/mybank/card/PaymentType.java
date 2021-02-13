@@ -1,4 +1,4 @@
-package org.kodluyoruz.mybank.account;
+package org.kodluyoruz.mybank.card;
 
 public enum PaymentType {
     ACCOUNT,

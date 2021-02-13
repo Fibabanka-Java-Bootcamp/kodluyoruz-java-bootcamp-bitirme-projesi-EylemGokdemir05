@@ -2,12 +2,10 @@ package org.kodluyoruz.mybank.card;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @Validated
@@ -21,16 +19,33 @@ public class CardController {
         this.cardService = cardService;
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CardDto create(@Valid @RequestBody CardDto cardDto){
+        return cardService.create(cardDto.toCard()).cardDto();
+    }
+
     @GetMapping("/{id}")
     public CardDto get(@PathVariable("id") UUID id){
         return cardService.get(id)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Card not found!")).cardDto();
     }
 
-    @GetMapping("/{id}/debt")
-    public CardDto getDebt(@PathVariable("id") UUID id,
-                           @PathVariable("debt") int debt){
-        return cardService.getDebt(id,debt)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Debt is not found!")).cardDto();
+    @GetMapping("/{id}/getdebt")
+    public int getDebt(@PathVariable("id") UUID id){
+        return cardService.getDebt(id);
+    }
+
+    @PutMapping("/{id}/updatedebt")
+    public CardDto updateDebt(@PathVariable("id") UUID id,
+                              @RequestParam("money") int money){
+        return cardService.updateDebt(id, money);
+    }
+
+    @PutMapping("/{id}/paydebt/{accountID}")
+    public CardDto payDebt(@PathVariable("id") UUID id,
+                           @PathVariable("accountID") UUID accountID,
+                           @RequestParam("debt") int debt){
+        return cardService.payDebt(id,accountID,debt);
     }
 }

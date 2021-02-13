@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Validated
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/customer")
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -28,7 +28,7 @@ public class CustomerController {
         return customerService.create(customerDto.toCustomer()).customerDto();
     }
 
-    @GetMapping(params = {"page","size"})
+    @GetMapping(value = "/customers",params = {"page","size"})
     public List<CustomerDto> list(@Min(value = 0) @RequestParam("page") int page,@RequestParam("size") int size){
         return customerService.list(PageRequest.of(page, size)).stream()
                 .map(Customer::customerDto)
@@ -41,13 +41,13 @@ public class CustomerController {
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Customer not found!")).customerDto();
     }
 
-    @PutMapping
+    @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public CustomerDto update(@Valid @RequestBody CustomerDto customerDto){
         return customerService.update(customerDto.toCustomer()).customerDto();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") UUID id){
         customerService.delete(id);
