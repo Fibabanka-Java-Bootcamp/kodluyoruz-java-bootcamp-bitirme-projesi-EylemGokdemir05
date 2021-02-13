@@ -32,24 +32,18 @@ public class AccountService {
         return accountRepo.deleteAccountById(id);
     }
 
-    public AccountDto getAccountSummary(UUID id) {
-        Customer customer=new Customer();
-        customer.setId(id);
-
-        if (!customerRepo.findById(id).isPresent()){
-            System.out.println("Customer not found!");
-        }
-
-        Optional<Account> account=accountRepo.findByCustomer(customer);
+    public Account getAccountSummary(UUID id) {
+        /*Optional<Account> account=accountRepo.findById(id);
         if (!account.isPresent()){
             System.out.println("Account not found!");
-        }
+        }*/
 
-        AccountDto accountDto=new AccountDto();
-        BeanUtils.copyProperties(account.get().getAccountNumber(),accountDto);
+        /*AccountDto accountDto=new AccountDto();
         accountDto.setCurrency(account.get().getCurrency());
-        accountDto.setBalance(1000);
-        return accountDto;
+        accountDto.setBalance(accountDto.getBalance());
+        return accountDto;*/
+        return accountRepo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Account " +
+                "not found with id"+id));
     }
 
     public AccountDto transferMoney(String IBAN,String toIBAN, int moneyTransfer){

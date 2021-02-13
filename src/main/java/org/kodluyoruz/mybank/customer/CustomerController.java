@@ -47,9 +47,9 @@ public class CustomerController {
         return customerService.update(customerDto.toCustomer()).customerDto();
     }
 
-    /*@DeleteMapping
+    @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    public CustomerDto delete(@PathVariable("id") UUID id){
-        return customerService.delete(id).customerDto();
-    }*/
+    public void delete(@PathVariable("id") UUID id){
+        customerService.delete(id);
+    }
 }

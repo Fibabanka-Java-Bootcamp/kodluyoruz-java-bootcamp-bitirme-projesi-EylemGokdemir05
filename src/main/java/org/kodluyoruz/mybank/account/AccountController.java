@@ -25,8 +25,8 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDto> getAccountSummary(@PathVariable("id")UUID id){
-        return ResponseEntity.ok().body(accountService.getAccountSummary(id));
+    public AccountDto getAccountSummary(@PathVariable("id")UUID id){
+        return accountService.getAccountSummary(id).accountDto();
     }
 
     @PutMapping("/{IBAN}/{toIBAN}")

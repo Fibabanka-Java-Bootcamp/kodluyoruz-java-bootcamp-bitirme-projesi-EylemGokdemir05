@@ -10,6 +10,4 @@ import java.util.UUID;
 public interface CustomerRepo extends CrudRepository<Customer, UUID> {
     Page<Customer> findAll(Pageable pageable);
     Optional<Customer> findById(UUID id);
-    /*void delete(UUID id);
-    boolean findCustomerByAccounts_Empty();*/
 }
